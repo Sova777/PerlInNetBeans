@@ -1,0 +1,430 @@
+#
+# CDDL HEADER START
+#
+# The contents of this file are subject to the terms of the
+# Common Development and Distribution License, Version 1.0 only
+# (the "License"). You may not use this file except in compliance
+# with the License.
+#
+# You can obtain a copy of the license at LICENSE.txt
+# or http://netbeans.mojgorod.ru/perl_licensing.html.
+# See the License for the specific language governing permissions
+# and limitations under the License.
+#
+# When distributing Covered Code, include this CDDL HEADER in each
+# file and include the License file at LICENSE.txt.
+# If applicable, add the following below this CDDL HEADER, with the
+# fields enclosed by brackets "[]" replaced with your own identifying
+# information: Portions Copyright [yyyy] [name of copyright owner]
+#
+# CDDL HEADER END
+#
+
+#
+# Copyright 2008-2012 Valeriy Soldatov. All rights reserved.
+# Use is subject to license terms.
+#
+
+# definition of tokens
+TOKEN:keyword:( 
+"do" | "each" | "else" | "elsif" | "for" | "foreach" |
+"if" | "unless" | "until" | "values" | "while" |
+"cmp" | "eq" | "ne" | "lt" | "gt" | "le" | "ge" |
+"not" | "and" | "or" | "xor" |
+"abs" | "accept" | "alarm" | "atan2" |
+"bind" | "binmode" | "bless" | "caller" |
+"chdir" | "chmod" | "chomp" | "chop" |
+"chown" | "chr" | "chroot" | "close" |
+"closedir" | "connect" | "continue" | "cos" |
+"crypt" | "dbmclose" | "dbmopen" | "defined" |
+"delete" | "die" | "do" | "dump" |
+"each" | "endgrent" | "endhostent" | "endnetent" |
+"endprotoent" | "endpwent" | "endservent" | "eof" |
+"eval" | "exec" | "exists" | "exit" |
+"exp" | "fcntl" | "fileno" | "flock" |
+"fork" | "format" | "formline" | "getc" |
+"getgrent" | "getgrgid" | "getgrnam" | "gethostbyaddr" |
+"gethostbyname" | "gethostent" | "getlogin" | "getnetbyaddr" |
+"getnetbyname" | "getnetent" | "getpeername" | "getpgrp" |
+"getppid" | "getpriority" | "getprotobyname" | "getprotobynumber" |
+"getprotoent" | "getpwent" | "getpwnam" | "getpwuid" | "getservbyname" |
+"getservbyport" | "getservent" | "getsockname" | "getsockopt" |
+"glob" | "gmtime" | "goto" | "grep" | "hex" | "import" |
+"index" | "int" | "ioctl" | "join" | "keys" | "kill" |
+"last" | "lc" | "lcfirst" | "length" | "link" | "listen" |
+"local" | "localtime" | "lock" | "log" | "lstat" | "m//" |
+"map" | "mkdir" | "msgctl" | "msgget" | "msgrcv" | "msgsnd" |
+"my" | "next" | "no" | "oct" | "open" | "opendir" | "ord" |
+"our" |"pack" | "package" | "pipe" | "pop" | "pos" | "print" |
+"printf" | "prototype" | "push" | "q/STRING/" | "qq/STRING/" |
+"qr/STRING/" | "quotemeta" | "qw/STRING/" | "qx/STRING/" |
+"rand" | "read" | "readdir" | "readline" | "readlink" | "readpipe" |
+"recv" | "redo" | "ref" | "rename" | "require" | "reset" |
+"return" | "reverse" | "rewinddir" | "rindex" | "rmdir" |
+"s///" | "scalar" | "seek" | "seekdir" | "select" | "semctl" |
+"semget" | "semop" | "send" | "setgrent" | "sethostent" |
+"setnetent" | "setpgrp" | "setpriority" | "setprotoent" |
+"setpwent" | "setservent" | "setsockopt" | "shift" |
+"shmctl" | "shmget" | "shmread" | "shmwrite" | "shutdown" |
+"sin" | "sleep" | "socket" | "sort" | "splice" | "split" |
+"sprintf" | "sqrt" | "srand" | "stat" | "study" | "sub" |
+"substr" | "symlink" | "syscall" | "sysopen" | "sysread" |
+"sysseek" | "system" | "syswrite" | "tell" | "telldir" |
+"tie" | "tied" | "time" | "times" | "tr///" | "truncate" |
+"uc" | "ucfirst" | "umask" | "undef" | "unlink" | "unpack" |
+"unshift" | "untie" | "use" | "utime" | "values" | "vec" |
+"wait" | "waitpid" | "wantarray" | "warn" | "write" |
+"-X" | "y///"
+)
+
+TOKEN:bracket:( "{" | "}")
+TOKEN:parenthesis:( "(" | ")" )
+TOKEN:number: ( ( "-" | "+" )? ["0"-"9"]+ (".")? ["0"-"9"]* ( "e" | "E" )? ( "-" | "+" )? ["0"-"9"]*)
+TOKEN:identifier:( ["a"-"z" "A"-"Z" "_"] ["a"-"z" "A"-"Z" "0"-"9" "_" ":"]* )
+TOKEN:whitespace:( [" " "\t" "\n" "\r"]+ )
+TOKEN:string: (
+ 	    "\"" ([^ "\\" "\""] |
+ 	          ("\\" (.))
+ 	         )* 
+ 	    "\""
+ 	)
+TOKEN:string: (
+ 	    "\'" ([^ "\\" "\'"] |
+ 	          ("\\" (.))
+ 	         )* 
+ 	    "\'"
+ 	)
+TOKEN:variable:( "$" ["a"-"z" "A"-"Z" "0"-"9" "_" ":"]+ )
+TOKEN:variable:( "$#" ["a"-"z" "A"-"Z" "0"-"9" "_" ":"]+ )
+TOKEN:variable:( "$#$" ["a"-"z" "A"-"Z" "0"-"9" "_" ":"]+ )
+TOKEN:variable:( "@" ["a"-"z" "A"-"Z" "0"-"9" "_" ":"]+ )
+TOKEN:variable:( "@#" ["a"-"z" "A"-"Z" "0"-"9" "_" ":"]+ )
+TOKEN:variable:( "%" ["a"-"z" "A"-"Z" "0"-"9" "_" ":"]+ )
+
+TOKEN:operator:( "=" | ";" | ":" |
+ "[" | "]" | "+" | "-" | "." | "," | "*" | "/" | "~" | "<" | ">" |
+ "&" | "|" | "\\" | "$" | "^" | "%" | "!" | "?" | "@" | "`")
+
+TOKEN:keyword: ( "~" " "+ "/" [^ "/" "\n" "\r" ]* "/" )
+TOKEN:keyword: ( "/" [^ "/" "\n" "\r" ]* [^"\\"]? "/" )
+TOKEN:keyword: ( "s/" [^ "/" "\n" "\r" ]* "/" [^ "/" "\n" "\r" ]* "/" )
+TOKEN:keyword: ( "s#" [^ "#" "\n" "\r" ]* "#" [^ "#" "\n" "\r" ]* "#" )
+TOKEN:keyword: ( "s{" [^ "{" "\n" "\r" ]* "}{" [^ "{" "\n" "\r" ]* "}" )
+TOKEN:keyword: ( "m/" [^ "/" "\n" "\r" ]* "/" )
+TOKEN:keyword: ( "m#" [^ "#" "\n" "\r" ]* "#" )
+TOKEN:keyword: ( "m{" [^ "{" "\n" "\r" ]* "}" )
+TOKEN:keyword: ( "y/" [^ "/" "\n" "\r" ]* "/" [^ "/" "\n" "\r" ]* "/" )
+TOKEN:keyword: ( "y#" [^ "#" "\n" "\r" ]* "#" [^ "#" "\n" "\r" ]* "#" )
+TOKEN:keyword: ( "y{" [^ "{" "\n" "\r" ]* "}{" [^ "{" "\n" "\r" ]* "}" )
+TOKEN:keyword: ( "tr/" [^ "/" "\n" "\r" ]* "/" [^ "/" "\n" "\r" ]* "/" )
+TOKEN:keyword: ( "tr#" [^ "#" "\n" "\r" ]* "#" [^ "#" "\n" "\r" ]* "#" )
+TOKEN:keyword: ( "tr{" [^ "{" "\n" "\r" ]* "}{" [^ "{" "\n" "\r" ]* "}" )
+
+TOKEN:keyword: ( "q/" [^ "/" "\n" "\r" ]* "/" )
+TOKEN:keyword: ( "qq/" [^ "/" "\n" "\r" ]* "/" )
+TOKEN:keyword: ( "qr/" [^ "/" "\n" "\r" ]* "/" )
+TOKEN:keyword: ( "qw/" [^ "/" "\n" "\r" ]* "/" )
+TOKEN:keyword: ( "qx/" [^ "/" "\n" "\r" ]* "/" )
+TOKEN:keyword: ( "q(" [^ "(" "\n" "\r" ]* ")" )
+TOKEN:keyword: ( "qq(" [^ "(" "\n" "\r" ]* ")" )
+TOKEN:keyword: ( "qr(" [^ "(" "\n" "\r" ]* ")" )
+TOKEN:keyword: ( "qw(" [^ "(" "\n" "\r" ]* ")" )
+TOKEN:keyword: ( "qx(" [^ "(" "\n" "\r" ]* ")" )
+
+TOKEN:comment:( "=head1" - "=cut" )
+TOKEN:comment:( "=item" - "=cut" )
+TOKEN:comment:( "=pod" - "=cut" )
+TOKEN:comment:( "=back" - "=cut" )
+TOKEN:comment:( "__END__" .+ )
+TOKEN:comment:( "__DATA__" .+ )
+TOKEN:comment:( "#" [^"\n" "\r"]* )
+# parser should ignore whitespaces
+SKIP:whitespace
+
+# definition of grammar
+S = Statement+;
+Statement = Comment | Block | Function | AnonymusFunction | ExpressionStatement;
+FunctName = <identifier> | <keyword>;
+AnonymusFunction = <keyword,'sub'> Block <operator,';'>;
+Function = <keyword,'sub'> FunctName (<parenthesis,'('><operator>*<parenthesis,')'>)* [Block | <operator,';'>];
+
+Comment = <comment>+;
+Block = 
+ <bracket,'{'>
+ (ExpressionStatement | Comment | Block)*
+ <bracket,'}'>;
+
+ExpressionStatement = (<identifier> | <variable> | <string> | <keyword>
+ | <operator> | <number> | <parenthesis> );
+
+COLOR:Function.FunctName: {font_type:"bold";}
+
+# code folding
+FOLD:Block
+FOLD:Comment
+
+# navigator support
+NAVIGATOR:Function: {
+    display_name: "$FunctName$";
+}
+
+# brace completion
+COMPLETE "{:}"
+#COMPLETE "(:)"
+
+# brace matching
+BRACE "{:}"
+BRACE "(:)"
+
+# indentation support
+INDENT "{:}"
+#INDENT "(:)"
+#INDENT "\\s*(((if|while)\\s*\\(|else\\s*|else\\s+if\\s*\\(|for\\s*\\(.*\\))[^{;]*)"
+
+SELECTION ( ["a"-"z" "A"-"Z" "0"-"9" "_" "$" "@" "%"] )
+
+# error highlighting
+#MARK:ERROR: {
+#    type:"Error";
+#    message:"Syntax error.";
+#}
+#MARK:error: {
+#    type:"Error";
+#    message:"Unexpected character.";
+#}
+
+COMMENT_LINE {
+    prefix:"#";
+}
+
+# code completion
+#cat tst | gawk -F\| '{print $1;print $2;print $3;print $4;print $5;print $6;print $7;print $8;print $9;}' | sort | grep -v ^$ | gawk -F\" '{print $2}' | sort | uniq | grep -v "/" | grep -v "-" | gawk -F\" '{print "text"NR": \"" $1"\";"}'
+COMPLETION:keyword, operator, identifier, whitespace: {
+text1: "abs";
+text2: "accept";
+text3: "alarm";
+text4: "and";
+text5: "atan2";
+text6: "bind";
+text7: "binmode";
+text8: "bless";
+text9: "caller";
+text10: "chdir";
+text11: "chmod";
+text12: "chomp";
+text13: "chop";
+text14: "chown";
+text15: "chr";
+text16: "chroot";
+text17: "close";
+text18: "closedir";
+text19: "cmp";
+text20: "connect";
+text21: "continue";
+text22: "cos";
+text23: "crypt";
+text24: "dbmclose";
+text25: "dbmopen";
+text26: "defined";
+text27: "delete";
+text28: "die";
+text29: "do";
+text30: "dump";
+text31: "each";
+text32: "else";
+text33: "elsif";
+text34: "endgrent";
+text35: "endhostent";
+text36: "endnetent";
+text37: "endprotoent";
+text38: "endpwent";
+text39: "endservent";
+text40: "eof";
+text41: "eq";
+text42: "eval";
+text43: "exec";
+text44: "exists";
+text45: "exit";
+text46: "exp";
+text47: "fcntl";
+text48: "fileno";
+text49: "flock";
+text50: "for";
+text51: "foreach";
+text52: "fork";
+text53: "format";
+text54: "formline";
+text55: "ge";
+text56: "getc";
+text57: "getgrent";
+text58: "getgrgid";
+text59: "getgrnam";
+text60: "gethostbyaddr";
+text61: "gethostbyname";
+text62: "gethostent";
+text63: "getlogin";
+text64: "getnetbyaddr";
+text65: "getnetbyname";
+text66: "getnetent";
+text67: "getpeername";
+text68: "getpgrp";
+text69: "getppid";
+text70: "getpriority";
+text71: "getprotobyname";
+text72: "getprotobynumber";
+text73: "getprotoent";
+text74: "getpwent";
+text75: "getpwnam";
+text76: "getpwuid";
+text77: "getservbyname";
+text78: "getservbyport";
+text79: "getservent";
+text80: "getsockname";
+text81: "getsockopt";
+text82: "glob";
+text83: "gmtime";
+text84: "goto";
+text85: "grep";
+text86: "gt";
+text87: "hex";
+text88: "if";
+text89: "import";
+text90: "index";
+text91: "int";
+text92: "ioctl";
+text93: "join";
+text94: "keys";
+text95: "kill";
+text96: "last";
+text97: "lc";
+text98: "lcfirst";
+text99: "le";
+text100: "length";
+text101: "link";
+text102: "listen";
+text103: "local";
+text104: "localtime";
+text105: "lock";
+text106: "log";
+text107: "lstat";
+text108: "lt";
+text109: "map";
+text110: "mkdir";
+text111: "msgctl";
+text112: "msgget";
+text113: "msgrcv";
+text114: "msgsnd";
+text115: "my";
+text116: "ne";
+text117: "next";
+text118: "no";
+text119: "not";
+text120: "oct";
+text121: "open";
+text122: "opendir";
+text123: "or";
+text124: "ord";
+text125: "our";
+text126: "pack";
+text127: "package";
+text128: "pipe";
+text129: "pop";
+text130: "pos";
+text131: "print";
+text132: "printf";
+text133: "prototype";
+text134: "push";
+text135: "quotemeta";
+text136: "rand";
+text137: "read";
+text138: "readdir";
+text139: "readline";
+text140: "readlink";
+text141: "readpipe";
+text142: "recv";
+text143: "redo";
+text144: "ref";
+text145: "rename";
+text146: "require";
+text147: "reset";
+text148: "return";
+text149: "reverse";
+text150: "rewinddir";
+text151: "rindex";
+text152: "rmdir";
+text153: "scalar";
+text154: "seek";
+text155: "seekdir";
+text156: "select";
+text157: "semctl";
+text158: "semget";
+text159: "semop";
+text160: "send";
+text161: "setgrent";
+text162: "sethostent";
+text163: "setnetent";
+text164: "setpgrp";
+text165: "setpriority";
+text166: "setprotoent";
+text167: "setpwent";
+text168: "setservent";
+text169: "setsockopt";
+text170: "shift";
+text171: "shmctl";
+text172: "shmget";
+text173: "shmread";
+text174: "shmwrite";
+text175: "shutdown";
+text176: "sin";
+text177: "sleep";
+text178: "socket";
+text179: "sort";
+text180: "splice";
+text181: "split";
+text182: "sprintf";
+text183: "sqrt";
+text184: "srand";
+text185: "stat";
+text186: "study";
+text187: "sub";
+text188: "substr";
+text189: "symlink";
+text190: "syscall";
+text191: "sysopen";
+text192: "sysread";
+text193: "sysseek";
+text194: "system";
+text195: "syswrite";
+text196: "tell";
+text197: "telldir";
+text198: "tie";
+text199: "tied";
+text200: "time";
+text201: "times";
+text202: "truncate";
+text203: "uc";
+text204: "ucfirst";
+text205: "umask";
+text206: "undef";
+text207: "unless";
+text208: "unlink";
+text209: "unpack";
+text210: "unshift";
+text211: "untie";
+text212: "until";
+text213: "use";
+text214: "utime";
+text215: "values";
+text216: "vec";
+text217: "wait";
+text218: "waitpid";
+text219: "wantarray";
+text220: "warn";
+text221: "while";
+text222: "write";
+text223: "xor";
+}
+
+#TOOLTIP:keyword:org.languages.perl.editor.Tooltip.getTooltip
+
+#BUNDLE "org.languages.perl.Bundle"

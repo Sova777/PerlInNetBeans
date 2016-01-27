@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.languages.perl
+OpenIDE-Module-Layer: org/languages/perl/layer.xml
+OpenIDE-Module-Localizing-Bundle: org/languages/perl/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0.6.1
+
+Name: org/languages/perl/perlDataLoader.class
+OpenIDE-Module-Class: Loader
+

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE MIME-resolver PUBLIC "-//NetBeans//DTD MIME Resolver 1.0//EN" "http://www.netbeans.org/dtds/mime-resolver-1_0.dtd">
+<MIME-resolver>
+    <file>
+        <ext name="pl"/>
+        <ext name="perl"/>
+        <ext name="pm"/>
+        <ext name="cgi"/>
+        <resolver mime="text/x-perl"/>
+    </file>
+    <file>
+        <ext name=""/>
+        <pattern value="#!" range="2">
+            <pattern value="/bin/perl" range="40"/>
+        </pattern>
+        <resolver mime="text/x-perl"/>
+    </file>
+</MIME-resolver>
