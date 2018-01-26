@@ -48,6 +48,7 @@ public class PerlSampleWizardPanel implements WizardDescriptor.Panel,
     public PerlSampleWizardPanel() {
     }
 
+    @Override
     public Component getComponent() {
         if (component == null) {
             component = new PerlSamplePanelVisual(this);
@@ -56,22 +57,26 @@ public class PerlSampleWizardPanel implements WizardDescriptor.Panel,
         return component;
     }
 
+    @Override
     public HelpCtx getHelp() {
         return new HelpCtx(PerlSampleWizardPanel.class);
     }
 
+    @Override
     public boolean isValid() {
         getComponent();
         return component.valid(wizardDescriptor);
     }
-    private final Set<ChangeListener> listeners = new HashSet<ChangeListener>(1); // or can use ChangeSupport in NB 6.0
+    private final Set<ChangeListener> listeners = new HashSet<>(1); // or can use ChangeSupport in NB 6.0
 
+    @Override
     public final void addChangeListener(ChangeListener l) {
         synchronized (listeners) {
             listeners.add(l);
         }
     }
 
+    @Override
     public final void removeChangeListener(ChangeListener l) {
         synchronized (listeners) {
             listeners.remove(l);
@@ -81,7 +86,7 @@ public class PerlSampleWizardPanel implements WizardDescriptor.Panel,
     protected final void fireChangeEvent() {
         Set<ChangeListener> ls;
         synchronized (listeners) {
-            ls = new HashSet<ChangeListener>(listeners);
+            ls = new HashSet<>(listeners);
         }
         ChangeEvent ev = new ChangeEvent(this);
         for (ChangeListener l : ls) {
@@ -89,20 +94,24 @@ public class PerlSampleWizardPanel implements WizardDescriptor.Panel,
         }
     }
 
+    @Override
     public void readSettings(Object settings) {
         wizardDescriptor = (WizardDescriptor) settings;
         component.read(wizardDescriptor);
     }
 
+    @Override
     public void storeSettings(Object settings) {
         WizardDescriptor d = (WizardDescriptor) settings;
         component.store(d);
     }
 
+    @Override
     public boolean isFinishPanel() {
         return true;
     }
 
+    @Override
     public void validate() throws WizardValidationException {
         getComponent();
         component.validate(wizardDescriptor);

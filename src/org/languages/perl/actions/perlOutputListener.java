@@ -48,15 +48,18 @@ public class perlOutputListener implements OutputListener {
         this.realLineNo = realLineNo;
     }
 
+    @Override
     public void outputLineSelected(OutputEvent arg0) {
     }
 
+    @Override
     public void outputLineAction(OutputEvent arg0) {
         LineCookie lc = dObj.getCookie(org.openide.cookies.LineCookie.class);
         Line line = lc.getLineSet().getOriginal(realLineNo);
         line.show(Line.SHOW_GOTO, pos);
     }
 
+    @Override
     public void outputLineCleared(OutputEvent arg0) {
     }
 }

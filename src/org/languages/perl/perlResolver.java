@@ -48,8 +48,7 @@ public class perlResolver extends MIMEResolver {
         }
         if (fo.isData() && fo.hasExt("")) {
             try {
-                InputStream is = fo.getInputStream();
-                try {
+                try (InputStream is = fo.getInputStream()) {
                     BufferedReader r = new BufferedReader(new InputStreamReader(is));
                     String line = r.readLine();
                     if (line == null) return null;
@@ -57,8 +56,6 @@ public class perlResolver extends MIMEResolver {
                     if (line.indexOf("#!/") == 0 && line.endsWith("/perl")) {
                         return "text/x-perl";
                     }
-                } finally {
-                    is.close();
                 }
             } catch (IOException x) {
             }
