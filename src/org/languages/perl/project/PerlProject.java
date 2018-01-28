@@ -61,6 +61,7 @@ public class PerlProject implements Project {
         this.state = state;
     }
     
+    @Override
     public FileObject getProjectDirectory() {
         return projectDir;
     }
@@ -79,6 +80,7 @@ public class PerlProject implements Project {
         return result;
     }
 
+    @Override
     public Lookup getLookup() {
         if (lkp == null) {
             lkp = Lookups.fixed(new Object[] {
@@ -127,14 +129,17 @@ public class PerlProject implements Project {
     }
 
     private final class ActionProviderImpl implements ActionProvider {
+        @Override
         public String[] getSupportedActions() {
             return new String[0];
         }
 
+        @Override
         public void invokeAction(String action, Lookup lookup) throws IllegalArgumentException {
             //do nothing
         }
 
+        @Override
         public boolean isActionEnabled(String action, Lookup lookup) throws IllegalArgumentException {
             return false;
         }
@@ -142,27 +147,33 @@ public class PerlProject implements Project {
 
     /** Implementation of project system's ProjectInformation class */
     private final class Info implements ProjectInformation {
+        @Override
         public Icon getIcon() {
             return new ImageIcon (ImageUtilities.loadImage(
                     "org/languages/perl/project.png"));
         }
 
+        @Override
         public String getName() {
             return getProjectDirectory().getName();
         }
 
+        @Override
         public String getDisplayName() {
             return getName();
         }
 
+        @Override
         public void addPropertyChangeListener (PropertyChangeListener pcl) {
             //do nothing, won't change
         }
 
+        @Override
         public void removePropertyChangeListener (PropertyChangeListener pcl) {
             //do nothing, won't change
         }
 
+        @Override
         public Project getProject() {
             return PerlProject.this;
         }

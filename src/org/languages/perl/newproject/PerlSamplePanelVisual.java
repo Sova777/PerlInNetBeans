@@ -240,6 +240,7 @@ public class PerlSamplePanelVisual extends JPanel implements DocumentListener {
     }
 
     // Implementation of DocumentListener --------------------------------------
+    @Override
     public void changedUpdate(DocumentEvent e) {
         updateTexts(e);
         if (this.projectNameTextField.getDocument() == e.getDocument()) {
@@ -247,6 +248,7 @@ public class PerlSamplePanelVisual extends JPanel implements DocumentListener {
         }
     }
 
+    @Override
     public void insertUpdate(DocumentEvent e) {
         updateTexts(e);
         if (this.projectNameTextField.getDocument() == e.getDocument()) {
@@ -254,6 +256,7 @@ public class PerlSamplePanelVisual extends JPanel implements DocumentListener {
         }
     }
 
+    @Override
     public void removeUpdate(DocumentEvent e) {
         updateTexts(e);
         if (this.projectNameTextField.getDocument() == e.getDocument()) {

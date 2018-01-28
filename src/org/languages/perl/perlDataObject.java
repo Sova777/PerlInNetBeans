@@ -32,8 +32,8 @@ import org.openide.loaders.DataObjectExistsException;
 import org.openide.loaders.MultiDataObject;
 import org.openide.nodes.CookieSet;
 import org.openide.nodes.Node;
-import org.openide.util.Lookup;
 import org.openide.text.DataEditorSupport;
+import org.openide.util.Lookup;
 
 //@MIMEResolver.Registration(displayName="#perlResolver", resource="/org/languages/perl/perlResolver.xml", position=133 )
 public class perlDataObject extends MultiDataObject {

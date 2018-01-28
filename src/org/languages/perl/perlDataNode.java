@@ -27,10 +27,10 @@
 package org.languages.perl;
 
 import javax.swing.Action;
+import org.openide.actions.OpenAction;
 import org.openide.loaders.DataNode;
 import org.openide.nodes.Children;
 import org.openide.util.Lookup;
-import org.openide.actions.OpenAction;
 import org.openide.util.actions.SystemAction;
 
 public class perlDataNode extends DataNode {

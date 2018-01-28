@@ -26,8 +26,12 @@
  */
 package org.languages.perl.actions;
 
+import com.sun.corba.se.pept.encoding.InputObject;
+import java.awt.Color;
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import org.netbeans.api.extexecution.ExecutionDescriptor;
@@ -39,12 +43,17 @@ import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
 import org.openide.util.actions.NodeAction;
+import org.openide.windows.IOColorLines;
+import org.openide.windows.IOProvider;
+import org.openide.windows.InputOutput;
 
 /**
  *
  * @author sova
  */
 public class RunAction extends NodeAction {
+
+    private static final Color OUTPUT_COLOR = new Color(0, 124, 0);
 
     @Override
     protected void performAction(Node[] activatedNodes) {
@@ -55,16 +64,27 @@ public class RunAction extends NodeAction {
         File workDir = file.getParentFile();
         StatusDisplayer.getDefault().setStatusText(file.getName() + " script started.");
         String[] cmd = new String[]{"perl", path};
-        ExecutionDescriptor descriptor = new ExecutionDescriptor().controllable(true)
+        final String tabName = file.getName() + " (Perl)";
+//        InputOutput io = IOProvider.getDefault().getIO(tabName, true);
+        ExecutionDescriptor descriptor = new ExecutionDescriptor()
+                /*.inputOutput(io)*/.controllable(true)
                 .frontWindow(true).inputVisible(true).showProgress(true);
         ExecutionService exeService = ExecutionService.newService(
-                new ProcessLaunch(cmd, workDir), descriptor, file.getName() + " (perl)"
+                new ProcessLaunch(cmd, workDir), descriptor, tabName
         );
         Future<Integer> exitCode = exeService.run();
         try {
-            if (exitCode.get() == 0) {
+            Integer exitValue = exitCode.get();
+            InputOutput io = IOProvider.getDefault().getIO(tabName, false);
+            if (exitValue == 0) {
+                if (IOColorLines.isSupported(io)) {
+                    IOColorLines.println(io, "\nRUN SUCCESSFUL", OUTPUT_COLOR);
+                }
                 StatusDisplayer.getDefault().setStatusText("Program finished successful.");
             } else {
+                if (IOColorLines.isSupported(io)) {
+                    IOColorLines.println(io, "\nRUN FAILED (exit value " + exitValue + ")", OUTPUT_COLOR);
+                }
                 StatusDisplayer.getDefault().setStatusText("Program failed.");
             }
 //            NotifyDescriptor.InputLine input =
@@ -74,7 +94,16 @@ public class RunAction extends NodeAction {
 //            } else {
 //                return;
 //            }
-        } catch (InterruptedException | ExecutionException ex) {
+        } catch (CancellationException ex) {
+            InputOutput io = IOProvider.getDefault().getIO(tabName, false);
+            if (IOColorLines.isSupported(io)) {
+                try {
+                    IOColorLines.println(io, "\nRUN TERMINATED", OUTPUT_COLOR);
+                } catch (IOException ex1) {
+                    Exceptions.printStackTrace(ex1);
+                }
+            }
+        } catch (InterruptedException | ExecutionException | IOException ex) {
             Exceptions.printStackTrace(ex);
         }
     }
@@ -110,9 +139,10 @@ public class RunAction extends NodeAction {
         @Override
         public Process call() throws Exception {
             ProcessBuilder pb = new ProcessBuilder(commandLine);
-            pb.directory(workDir); //NOI18N
+            pb.directory(workDir);
             pb.redirectErrorStream(true);
-            return pb.start();
+            Process process = pb.start();
+            return process;
         }
     }
 
